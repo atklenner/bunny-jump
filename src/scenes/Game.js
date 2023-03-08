@@ -1,0 +1,16 @@
+import Phaser from "../lib/phaser.js";
+
+export default class Game extends Phaser.Scene {
+  constructor() {
+    // this gives the scene a unique key
+    super("game");
+  }
+
+  preload() {
+    this.load.image("background", "assets/bg_layer1.png");
+  }
+
+  create() {
+    this.add.image(240, 320, "background");
+  }
+}
