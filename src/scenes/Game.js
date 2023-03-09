@@ -61,9 +61,16 @@ export default class Game extends Phaser.Scene {
 
     this.carrots = this.physics.add.group({ classType: Carrot });
 
-    this.carrots.get(240, 320, "carrot");
-
     this.physics.add.collider(this.platforms, this.carrots);
+
+    // run handleCollectCarrot when player and carrots overlap
+    this.physics.add.overlap(
+      this.player,
+      this.carrots,
+      this.handleCollectCarrot,
+      undefined,
+      this
+    );
   }
 
   update() {
@@ -118,5 +125,13 @@ export default class Game extends Phaser.Scene {
     carrot.body.setSize(carrot.width, carrot.height);
 
     return carrot;
+  }
+
+  handleCollectCarrot(player, carrot) {
+    // hide the carrot from displaying
+    this.carrots.killAndHide(carrot);
+
+    // disable the carrot from the physics world
+    this.physics.world.disableBody(carrot.body);
   }
 }
