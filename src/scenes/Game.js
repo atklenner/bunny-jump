@@ -11,6 +11,7 @@ export default class Game extends Phaser.Scene {
   /** @type {Phaser.Types.Input.Keyboard.CursorKeys} */
   cursors;
 
+  /** @type {Phaser.Physics.Arcade.Group} */
   carrots;
 
   constructor() {
@@ -90,6 +91,17 @@ export default class Game extends Phaser.Scene {
         platform.body.updateFromGameObject();
 
         this.addCarrotAbove(platform);
+      }
+    });
+
+    // this is supposed to collect any carrots that fall of the screen
+    // I have no idea if this works...
+    this.carrots.children.iterate((child) => {
+      const carrot = child;
+
+      const scrollY = this.cameras.main.scrollY;
+      if (carrot.y >= scrollY + 700) {
+        this.carrots.killAndHide(carrot);
       }
     });
 
