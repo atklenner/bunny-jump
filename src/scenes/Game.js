@@ -14,6 +14,10 @@ export default class Game extends Phaser.Scene {
   /** @type {Phaser.Physics.Arcade.Group} */
   carrots;
 
+  carrotsCollected = 0;
+
+  carrotsCollectedText;
+
   constructor() {
     // this gives the scene a unique key
     super("game");
@@ -72,6 +76,13 @@ export default class Game extends Phaser.Scene {
       undefined,
       this
     );
+
+    // add text that keeps track of the score for the user
+    const style = { color: "#000", fontSize: 24 };
+    this.carrotsCollectedText = this.add
+      .text(240, 10, "Carrots: 0", style)
+      .setScrollFactor(0)
+      .setOrigin(0.5, 0);
   }
 
   update() {
@@ -114,6 +125,12 @@ export default class Game extends Phaser.Scene {
     }
 
     this.horizontalWrap(this.player);
+
+    const bottomPlatform = this.findBottomMostPlatform();
+
+    if (this.player.y > bottomPlatform.y + 200) {
+      console.log("game over");
+    }
   }
 
   horizontalWrap(sprite) {
@@ -151,5 +168,28 @@ export default class Game extends Phaser.Scene {
 
     // disable the carrot from the physics world
     this.physics.world.disableBody(carrot.body);
+
+    // increment the score value when the carrot is collected
+    this.carrotsCollected++;
+
+    // update score text
+    this.carrotsCollectedText.text = `Carrots: ${this.carrotsCollected}`;
+  }
+
+  findBottomMostPlatform() {
+    const platforms = this.platforms.getChildren();
+    let bottomPlatform = platforms[0];
+
+    for (let i = 1; i < platforms.length; i++) {
+      const platform = platforms[i];
+
+      if (platform.y < bottomPlatform.y) {
+        continue;
+      }
+
+      bottomPlatform = platform;
+    }
+
+    return bottomPlatform;
   }
 }
