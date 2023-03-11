@@ -118,11 +118,17 @@ export default class Game extends Phaser.Scene {
   addCarrotAbove(sprite) {
     const y = sprite.y - sprite.displayHeight;
 
+    /** @type {Phaser.Physics.Arcade.Sprite} */
     const carrot = this.carrots.get(sprite.x, y, "carrot");
+
+    carrot.setActive(true);
+    carrot.setVisible(true);
 
     this.add.existing(carrot);
 
     carrot.body.setSize(carrot.width, carrot.height);
+
+    this.physics.world.enable(carrot);
 
     return carrot;
   }
