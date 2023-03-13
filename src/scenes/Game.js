@@ -1,6 +1,7 @@
 import Phaser from "../lib/phaser.js";
 import Carrot from "../game/Carrot.js";
 
+// we extend the base Phaser.Scene class to create our own
 export default class Game extends Phaser.Scene {
   /** @type {Phaser.Physics.Arcade.Sprite} */
   player;
@@ -23,21 +24,36 @@ export default class Game extends Phaser.Scene {
     super("game");
   }
 
+  // the next three methods are called to setup the scene when it is being used
+
+  // this method is called before preload and create
   init() {
+    // initialize the count, this is done here to reset the count when reseting the game
     this.carrotsCollected = 0;
   }
 
+  // called before create, used to load assets
   preload() {
+    // this.load is a loader plugin that handles images, sounds, textures, and other data
+    // preload is the place to do this loading, if you do it elsewhere you have to
+    // start the Loader yourself
     this.load.image("background", "assets/bg_layer1.png");
     this.load.image("platform", "assets/ground_grass.png");
     this.load.image("bunny-stand", "assets/bunny1_stand.png");
     this.load.image("bunny-jump", "assets/bunny1_jump.png");
     this.load.image("carrot", "assets/carrot.png");
 
+    // this.input is an Input Plugin, this.input.keyboard is the keyboard plugin
+    // the createCursorKeys method returns the arrow keys, shift, and space that we can use
+    // to check if they are being pressed
     this.cursors = this.input.keyboard.createCursorKeys();
   }
 
+  // called last when the scene starts, used to create the actual game objects used in this scene
   create() {
+    // this.add is a game object factory, lets us add objects to a scene easily, here we
+    // add an image, the scroll factor is set on the image
+    // a scroll factor of 0 means the image doesn't move, 1 means it moves exactly with the camera
     this.add.image(240, 320, "background").setScrollFactor(1, 0);
 
     this.platforms = this.physics.add.staticGroup();
@@ -90,6 +106,7 @@ export default class Game extends Phaser.Scene {
       .setOrigin(0.5, 0);
   }
 
+  // this method is run once per frame when the scene is running
   update() {
     const touchingDown = this.player.body.touching.down;
 
