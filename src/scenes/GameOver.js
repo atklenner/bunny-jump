@@ -5,6 +5,7 @@ export default class GameOver extends Phaser.Scene {
     super("game-over");
   }
 
+  // just add some text to tell the player that they have failed their one job
   create() {
     const width = this.scale.width;
     const height = this.scale.height;
